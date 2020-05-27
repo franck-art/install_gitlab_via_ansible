@@ -1,0 +1,24 @@
+- hosts: localhost
+  become: true
+
+  vars_files:
+    - "default/main.yml"
+    - "{{ home }}/.ansible/roles/geerlingguy.gitlab/defaults/main.yml"
+
+  vars:
+
+    pip_install_packages:
+      - name: docker
+
+  pre_tasks:
+  - name: update all packages 
+    yum:
+      name: '*'
+      update_cache: yes
+      state: latest 
+
+
+  roles:
+    - role: geerlingguy.gitlab 
+    - role: geerlingguy.pip
+    - role: geerlingguy.docker
