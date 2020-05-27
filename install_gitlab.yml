@@ -1,11 +1,12 @@
 - hosts: localhost
   become: true
 
-  vars_files:
-    - "default/main.yml"
-    - "{{ home }}/.ansible/roles/geerlingguy.gitlab/defaults/main.yml"
-
+  
   vars:
+    gitlab_version: '11.4.0-ce.0.el7'
+    gitlab_domain: "curl http://169.254.169.254/latest/meta-data/public-hostname"
+    gitlab_external_url: "http://{{ gitlab_domain }}/"
+    gitlab_edition: "gitlab-ce"
 
     pip_install_packages:
       - name: docker
@@ -16,6 +17,10 @@
       name: '*'
       update_cache: yes
       state: latest 
+  - name: Install epel release
+    yum: 
+      name: epel-release
+      state: installed
 
 
   roles:
